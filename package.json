@@ -1,0 +1,22 @@
+{
+    "name": "bluephp",
+    "version": "1.0.0",
+    "description": "convert apib to php RestServer Controllers",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "apiblueprint",
+        "restserver"
+    ],
+    "author": "Benjamin Dequevauviller",
+    "license": "MIT",
+    "bin": {
+        "bluephp": "./index.js"
+    },
+    "dependencies": {
+        "commander": "2.9.0",
+        "protagonist": "1.5.0"
+    }
+}
