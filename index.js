@@ -25,7 +25,7 @@ program
                     return;
                 }
 
-                // fs.writeFile('parsed.json', JSON.stringify(result));
+                fs.writeFile('parsed.json', JSON.stringify(result));
 
                 fs.writeFileSync(newfile, "<?php\n\n");
 
@@ -71,23 +71,28 @@ var mytitle = function(obj, level) {
 
             else if (nobj.element == "resource") {
 
-                var desc = nobj.content[0].meta.title.content;
+                if(Array.isArray(nobj.content)){
+                    nobj.content.forEach(function(element){
 
-                var fname = nobj.content[0].content[0].content[0].attributes.method.content.toLowerCase()
-                            + "_"
-                            + nobj.attributes.href.content.replace(/\{[a-zA-Z_]*\}/, "").replace(/\//ig, "");
+                        var desc = element.meta.title.content;
 
-                fs.appendFileSync(newfile, "\t/**\n\t* @description "
-                                + desc
-                                + " \n\t* @url "
-                                + nobj.content[0].content[0].content[0].attributes.method.content
-                                + " "
-                                + nobj.attributes.href.content
-                                    .replace(/\{\?[a-zA-Z_]*\}/ig, "")
-                                    .replace(/\{([a-zA-Z_]*)\}/ig, "$$$1")
-                                + "\n\t*/\n");
+                        var fname = element.content[0].content[0].attributes.method.content.toLowerCase()
+                                    + nobj.attributes.href.content.replace(/\{[a-zA-Z_\?,]*\}/ig, "").replace(/\//ig, "_");
 
-                fs.appendFileSync(newfile, "\tpublic function "+fname+"() {\n\t\n\t}\n\n");
+                        fs.appendFileSync(newfile, "\t/**\n\t* @description "
+                                        + desc
+                                        + " \n\t* @url "
+                                        + element.content[0].content[0].attributes.method.content
+                                        + " "
+                                        + nobj.attributes.href.content
+                                            .replace(/\{\?[a-zA-Z_\,]*\}/ig, "")
+                                            .replace(/\{([a-zA-Z_]*)\}/ig, "$$$1")
+                                        + "\n\t*/\n");
+
+                        fs.appendFileSync(newfile, "\tpublic function "+fname+"() {\n\t\n\t}\n\n");
+
+                    });
+                }
 
             }
 
